@@ -1,0 +1,341 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background: #0a0a0a;
+  font-family: 'Segoe UI', sans-serif;
+  color: #e0e0e0;
+}
+
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* HUD */
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#hud > * {
+  pointer-events: auto;
+}
+
+/* Player bars */
+#player-bars {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 220px;
+}
+
+.bar {
+  position: relative;
+  height: 22px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  transition: width 0.2s ease;
+  width: 100%;
+}
+
+.hp-fill {
+  background: linear-gradient(180deg, #c0392b, #8b1a1a);
+}
+
+.mp-fill {
+  background: linear-gradient(180deg, #2980b9, #1a4a6b);
+}
+
+.target-hp-fill {
+  background: linear-gradient(180deg, #e67e22, #a85a13);
+}
+
+.bar-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Target info */
+#target-info {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  text-align: center;
+}
+
+#target-name {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+/* Skill bar */
+#skill-bar {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.skill-slot {
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.skill-slot:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.skill-slot.on-cooldown {
+  opacity: 0.4;
+}
+
+.skill-key {
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+.skill-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.skill-name {
+  font-size: 10px;
+  margin-top: 1px;
+  opacity: 0.85;
+}
+
+/* Controls help */
+#controls-help {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 10px;
+  line-height: 1.6;
+  opacity: 0.6;
+}
+
+.help-title {
+  font-weight: 600;
+  margin-bottom: 3px;
+  font-size: 11px;
+  opacity: 1;
+}
+
+/* Quest tracker */
+#quest-tracker {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 180px;
+}
+
+#quest-title {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #f0c040;
+}
+
+#quest-progress {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+/* FPS counter */
+#fps-counter {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 11px;
+  opacity: 0.5;
+}
+
+/* Chat */
+#chat-container {
+  position: absolute;
+  bottom: 120px;
+  left: 20px;
+  width: 320px;
+}
+
+#chat-messages {
+  height: 140px;
+  overflow-y: auto;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 6px 6px 0 0;
+  font-size: 12px;
+  scrollbar-width: thin;
+}
+
+#chat-messages .msg {
+  margin-bottom: 3px;
+  line-height: 1.4;
+}
+
+#chat-messages .msg-name {
+  font-weight: 600;
+  color: #7cb3d4;
+}
+
+#chat-input {
+  width: 100%;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  color: #e0e0e0;
+  font-size: 12px;
+  outline: none;
+}
+
+#chat-input:focus {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* NPC Dialogue */
+#npc-dialogue {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  max-width: 90%;
+  background: rgba(10, 10, 10, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+#npc-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f0c040;
+  margin-bottom: 10px;
+}
+
+#npc-text {
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+#npc-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#npc-options button {
+  padding: 8px 14px;
+  background: #1a1a2e;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+#npc-options button:hover {
+  background: #2a2a4e;
+}
+
+/* Death screen */
+#death-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.death-text {
+  font-size: 32px;
+  font-weight: 700;
+  color: #c0392b;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+#respawn-btn {
+  padding: 12px 32px;
+  background: #1a1a2e;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+#respawn-btn:hover {
+  background: #2a2a4e;
+}
+
+/* Utility */
+.hidden {
+  display: none !important;
+}

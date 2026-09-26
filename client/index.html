@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Munorok</title>
+  <link rel="stylesheet" href="css/hud.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- HUD Overlay -->
+    <div id="hud">
+      <div id="player-bars">
+        <div id="hp-bar" class="bar">
+          <div class="bar-fill hp-fill"></div>
+          <span class="bar-text">100/100</span>
+        </div>
+        <div id="mp-bar" class="bar">
+          <div class="bar-fill mp-fill"></div>
+          <span class="bar-text">50/50</span>
+        </div>
+      </div>
+
+      <div id="target-info" class="hidden">
+        <span id="target-name"></span>
+        <div class="bar">
+          <div class="bar-fill target-hp-fill"></div>
+          <span class="bar-text" id="target-hp-text"></span>
+        </div>
+      </div>
+
+      <div id="skill-bar">
+        <div class="skill-slot" data-key="1" id="skill-attack" title="Ataque com espada. Selecione um alvo e pressione 1.">
+          <span class="skill-key">1</span>
+          <span class="skill-icon">&#9876;</span>
+          <span class="skill-name">Espada</span>
+        </div>
+        <div class="skill-slot" data-key="2" id="skill-essence" title="Habilidade de fogo. Gasta mana. Selecione um alvo e pressione 2.">
+          <span class="skill-key">2</span>
+          <span class="skill-icon">&#9832;</span>
+          <span class="skill-name">Fogo</span>
+        </div>
+      </div>
+
+      <div id="quest-tracker" class="hidden">
+        <div id="quest-title"></div>
+        <div id="quest-progress"></div>
+      </div>
+
+      <div id="fps-counter">FPS: 0</div>
+
+      <div id="controls-help">
+        <div class="help-title">Controles</div>
+        <div>WASD - Mover</div>
+        <div>Botão direito - Girar câmera</div>
+        <div>Scroll - Zoom</div>
+        <div>Clique - Selecionar alvo</div>
+        <div>Tab - Alvo mais próximo</div>
+        <div>1 - Ataque com espada</div>
+        <div>2 - Habilidade de fogo (mana)</div>
+        <div>Enter - Chat</div>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div id="chat-container">
+      <div id="chat-messages"></div>
+      <input type="text" id="chat-input" placeholder="Pressione Enter pra falar..." maxlength="200">
+    </div>
+
+    <!-- NPC Dialogue -->
+    <div id="npc-dialogue" class="hidden">
+      <div id="npc-name"></div>
+      <div id="npc-text"></div>
+      <div id="npc-options"></div>
+    </div>
+
+    <!-- Death screen -->
+    <div id="death-screen" class="hidden">
+      <div class="death-text">Você foi derrotado</div>
+      <button id="respawn-btn">Renascer</button>
+    </div>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.175.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.175.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
