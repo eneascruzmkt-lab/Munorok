@@ -1,4 +1,1 @@
 node_modules/
-# Modelos 3D (muito grandes pro GitHub, baixar do Mixamo)
-client/models/*.fbx
-client/models/*.glb
