@@ -1,0 +1,243 @@
+========================================================
+  MUNOROK - O REINO CAIDO - Registro de Progresso
+  MMO 3D Dark Fantasy no Navegador
+  Data: 26/09/2026
+========================================================
+
+REPOSITORIO: https://github.com/eneascruzmkt-lab/Munorok
+
+COMO RODAR:
+  git clone https://github.com/eneascruzmkt-lab/Munorok.git
+  cd Munorok
+  npm install
+  node server/index.js
+  Abrir http://localhost:3000 no navegador
+
+========================================================
+  CONCEITO DO JOGO
+========================================================
+
+- MMO 3D de fantasia medieval sombria jogavel no navegador
+- Free-to-play com marketplace de skins (futuro)
+- 3 facoes: Ordem de Solwyn, Pacto de Ashvern, Filhos de Drokmur
+- Sistema de combate: Arma (6 tipos) + Essencia (6 tipos) + Corrupcao (0-100%)
+- Evolucao de classe pela historia (escolhas narrativas)
+- Tab-target, camera terceira pessoa
+- Guerra por territorios 50v50v50 com cercos (futuro)
+
+========================================================
+  STACK TECNICA
+========================================================
+
+- Cliente: Three.js/WebGL, HTML/CSS HUD
+- Servidor: Node.js, WebSockets nativos (ws), ESM modules
+- Testes: Vitest (39 testes passando)
+- Modelos 3D: Mixamo (FBX), suporte a GLB/GLTF
+- Sem banco de dados no MVP (PostgreSQL + Redis planejado)
+
+========================================================
+  O QUE FOI IMPLEMENTADO (MVP)
+========================================================
+
+SERVIDOR (7 modulos):
+  1. protocol.js - Constantes e tipos de mensagem (MSG)
+  2. WorldState.js - Zona 100x100, limites, spawns, terreno procedural
+  3. PlayerManager.js - Jogadores, movimentacao, validacao de velocidade
+  4. MonsterManager.js - 3 tipos de monstros, IA de aggro, respawn 10s
+  5. CombatSystem.js - 6 armas + 6 essencias, cooldowns, skills com mana
+  6. NpcManager.js - Anciao Korrath, dialogo, quest "A Ameaca Corrompida"
+  7. GameLoop.js - Loop autoritativo 20 tick/s integrando tudo
+  8. index.js - HTTP server + WebSocket, roteamento de mensagens
+
+CLIENTE (11 modulos):
+  1. Renderer.js - Cena Three.js, terreno com vertex colors, arvores com
+     folhagem, arbustos, pedras, tochas com luz, particulas de corrupcao,
+     modelos de personagens (geometrico + 3D), efeitos de ataque/dano
+  2. Camera.js - Terceira pessoa, orbit com botao direito, zoom com scroll
+  3. InputHandler.js - WASD + setas, Tab targeting, chat com Enter
+  4. PlayerController.js - Movimentacao com predicao client-side, animacao
+     de andar/atacar (geometrica ou modelo 3D)
+  5. NetworkClient.js - WebSocket client, enviar/receber mensagens
+  6. EntityManager.js - Players remotos, monstros, NPCs com interpolacao
+  7. CombatUI.js - Click pra selecionar alvo, Tab pra mais proximo,
+     tecla 1 pra atacar, tecla 2 pra skill
+  8. HUD.js - Barras HP/MP, FPS counter, quest tracker, tela de morte
+  9. Chat.js - Chat multiplayer com Enter, mensagens de sistema
+  10. NpcUI.js - Janela de dialogo, aceitar quest, opcoes
+  11. ModelLoader.js - Carregador de modelos GLB/FBX com suporte a
+      animacoes separadas do Mixamo (idle, walk, attack, die)
+  12. main.js - Game loop do cliente integrando tudo
+
+HTML/CSS:
+  - index.html - Entry point com HUD overlay, chat, dialogo NPC, tela de morte
+  - hud.css - Estilo dark fantasy, barras de vida, skill bar com icones,
+    painel de controles
+
+TESTES (39 passando):
+  - WorldState.test.js (5 testes)
+  - PlayerManager.test.js (6 testes)
+  - MonsterManager.test.js (6 testes)
+  - CombatSystem.test.js (9 testes)
+  - NpcManager.test.js (7 testes)
+  - GameLoop.test.js (6 testes)
+
+MODELOS 3D:
+  - player.fbx - Vampire A Lusth (Mixamo, modelo base com skin)
+  - player_idle.fbx - Animacao idle
+  - player_walk.fbx - Animacao andando
+  - player_attack.fbx - Animacao stabbing (adagas)
+  - player_die.fbx - Animacao morrendo
+
+========================================================
+  ESTRUTURA DE ARQUIVOS
+========================================================
+
+Munorok/
+  package.json
+  .gitignore
+  server/
+    index.js
+    protocol.js
+    GameLoop.js
+    PlayerManager.js
+    MonsterManager.js
+    CombatSystem.js
+    NpcManager.js
+    WorldState.js
+  client/
+    index.html
+    css/
+      hud.css
+    js/
+      main.js
+      Renderer.js
+      Camera.js
+      InputHandler.js
+      PlayerController.js
+      NetworkClient.js
+      EntityManager.js
+      CombatUI.js
+      HUD.js
+      Chat.js
+      NpcUI.js
+      ModelLoader.js
+    models/
+      player.fbx
+      player_idle.fbx
+      player_walk.fbx
+      player_attack.fbx
+      player_die.fbx
+  tests/
+    setup.js
+    server/
+      WorldState.test.js
+      PlayerManager.test.js
+      MonsterManager.test.js
+      CombatSystem.test.js
+      NpcManager.test.js
+      GameLoop.test.js
+
+========================================================
+  SISTEMA DE COMBATE (detalhes)
+========================================================
+
+ARMAS:
+  - Espada e Escudo: 12 dano, range 2.5, cooldown 20 ticks
+  - Espadao: 20 dano, range 3, cooldown 35 ticks
+  - Adagas Duplas: 8 dano, range 1.5, cooldown 12 ticks
+  - Arco: 14 dano, range 15, cooldown 25 ticks
+  - Cajado: 10 dano, range 12, cooldown 22 ticks
+  - Martelo de Guerra: 18 dano, range 3, cooldown 40 ticks
+
+ESSENCIAS:
+  - Fogo: +8 dano, 10 mana, efeito burn
+  - Gelo: +5 dano, 8 mana, efeito slow
+  - Sombra: +6 dano, 12 mana, efeito dot
+  - Luz: +3 dano, 15 mana, efeito heal
+  - Trovao: +10 dano, 14 mana, efeito aoe
+  - Terra: +4 dano, 10 mana, efeito barrier
+
+MONSTROS:
+  - Lobo Corrompido: 50 HP, 8 dano, aggro 8, respawn 10s
+  - Aranha Sombria: 35 HP, 12 dano, aggro 6, respawn 10s
+  - Cavaleiro Oco: 120 HP, 15 dano, aggro 10, respawn 10s
+
+QUEST:
+  - "A Ameaca Corrompida" - Eliminar 3 lobos corrompidos
+  - Recompensa: 100 XP
+  - NPC: Anciao Korrath (posicao 5, 0, -5)
+
+========================================================
+  CONTROLES DO JOGO
+========================================================
+
+  WASD / Setas - Mover
+  Botao direito - Girar camera
+  Scroll - Zoom
+  Clique esquerdo - Selecionar alvo
+  Tab - Alvo mais proximo
+  1 - Ataque com arma
+  2 - Habilidade de essencia (gasta mana)
+  Enter - Abrir/enviar chat
+  Esc - Fechar chat
+
+========================================================
+  PROBLEMAS CONHECIDOS / AJUSTES FEITOS
+========================================================
+
+  - Movimento WASD corrigido (rotacao pela camera estava invertida)
+  - Animacao de andar corrigida (isMoving resetava antes de animar)
+  - Suporte a setas do teclado adicionado
+  - Threshold de movimento aumentado pra 300ms (evita reset de animacao)
+  - Transicoes suaves entre animacoes (fadeTime 0.25s)
+  - Sombras desabilitadas pra melhor performance
+  - Particulas reduzidas de 150 pra 40
+  - Terreno ajustado varias vezes (muito escuro > muito claro > equilibrado)
+  - Personagem geometrico melhorado de esferas pra estilo angular
+  - Bug de respawn de monstros corrigido (off-by-one no timer)
+  - FBXLoader adicionado alem de GLTFLoader
+  - Conflito de animacao FBX base resolvido (limpar actions antes de carregar extras)
+
+========================================================
+  PROXIMOS PASSOS (futuro)
+========================================================
+
+  - Selecao de classe/arma antes de entrar no jogo
+  - Mais quests e NPCs
+  - Sistema de corrupcao (0-100%)
+  - Especializacoes de classe por escolhas narrativas
+  - Mais zonas/mapas
+  - PvP e guerra de territorios
+  - Marketplace de skins
+  - PostgreSQL + Redis pra persistencia
+  - Modelos 3D pra monstros e NPC (Mixamo/Sketchfab)
+  - Texturas no terreno (grama, terra, pedra)
+  - Efeitos de particulas de essencia (fogo, gelo, etc)
+  - Sons e musica
+  - Tela de login/registro
+  - Sistema de inventario
+  - Minimap funcional
+
+========================================================
+  ONDE BAIXAR MODELOS 3D GRATUITOS
+========================================================
+
+  - Mixamo (mixamo.com) - Personagens com animacoes, gratuito
+  - Quaternius (quaternius.com) - Low-poly gratuitos
+  - Kenney (kenney.nl) - Assets de jogo gratuitos
+  - Sketchfab (sketchfab.com) - Filtrar por free + downloadable
+  - ambientCG (ambientcg.com) - Texturas PBR gratuitas
+  - Poly Haven (polyhaven.com) - Texturas e HDRIs
+
+========================================================
+  COMO ADICIONAR NOVOS MODELOS
+========================================================
+
+  1. Baixar modelo .glb ou .fbx
+  2. Colocar em client/models/
+  3. Editar MODEL_CONFIG em client/js/ModelLoader.js
+  4. Pra animacoes do Mixamo: baixar cada animacao como FBX separado
+     e configurar no campo "animations" do config
+  5. O jogo carrega automaticamente e usa fallback geometrico se nao achar
+
+========================================================
